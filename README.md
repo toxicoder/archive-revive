@@ -21,11 +21,11 @@ graph TD
 
     subgraph Processing
         C{Process File}
-        D[1. Convert PDF to Images]
-        E[2. Preprocess Image]
-        F[3. Perform OCR to ALTO XML]
-        G[4. Generate HTML from ALTO]
-        H[5. Normalize for RAG from ALTO]
+        D[Convert PDF to Images]
+        E[Preprocess Image]
+        F[Perform OCR to ALTO XML]
+        G[Generate HTML from ALTO]
+        H[Normalize for RAG from ALTO]
     end
 
     subgraph Output
