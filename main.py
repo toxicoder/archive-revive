@@ -38,8 +38,17 @@ def process_image(image_path, output_dir, config):
         normalize_for_rag(alto_path, rag_dir)
 
         # --- Generate HTML ---
-        from src.generate_html import generate_html
-        generate_html(alto_path, html_dir)
+        from src.generate_html import create_html_from_alto
+        html_output_path = os.path.join(html_dir, f"{base_name}.html")
+        image_dir_path = os.path.join(html_dir, 'images')
+        create_html_from_alto(alto_path, html_output_path, image_dir_path, preprocessed_path)
+
+        # --- Copy CSS file ---
+        import shutil
+        css_source_path = 'src/style.css'
+        css_dest_path = os.path.join(html_dir, 'style.css')
+        if os.path.exists(css_source_path):
+            shutil.copy(css_source_path, css_dest_path)
 
         logging.info(f"Successfully processed image: {image_path}")
 
