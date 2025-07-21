@@ -1,0 +1,5 @@
+opencv-python
+lxml
+spacy
+pymongo
+# Note: Tesseract is a system dependency, not a pip package.
