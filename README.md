@@ -14,13 +14,34 @@ This project is a multi-stage pipeline that processes scanned historical newspap
 
 ```mermaid
 graph TD
-    A[Input: Scanned Image/PDF] --> B{Process File};
-    B --> C[1. Preprocess Image];
-    C --> D[2. Perform OCR];
-    D --> E[3. Generate HTML];
-    D --> F[4. Normalize for RAG];
-    E --> G[Output: HTML/CSS];
-    F --> H[Output: JSON for RAG];
+    subgraph Input
+        A[Scanned Image]
+        B[PDF Document]
+    end
+
+    subgraph Processing
+        C{Process File}
+        D[1. Convert PDF to Images]
+        E[2. Preprocess Image]
+        F[3. Perform OCR to ALTO XML]
+        G[4. Generate HTML from ALTO]
+        H[5. Normalize for RAG from ALTO]
+    end
+
+    subgraph Output
+        I[HTML/CSS Files]
+        J[JSON for RAG]
+    end
+
+    A --> C;
+    B --> D;
+    D --> E;
+    C --> E;
+    E --> F;
+    F --> G;
+    F --> H;
+    G --> I;
+    H --> J;
 ```
 
 ## Technology Stack
