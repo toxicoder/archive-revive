@@ -1,6 +1,20 @@
-# src/utils/logging_config.py
-# Configures the central logging for the application.
+import logging
+import os
 
-# TODO: Configure a logger using Python's logging module.
-# TODO: Set up two handlers: one for console output and one for writing to a file (pipeline.log).
-# TODO: Define a consistent, timestamped format for all log messages.
+
+def setup_logging(log_dir):
+    """
+    Configures logging to both console and file.
+    """
+    log_file = os.path.join(log_dir, 'pipeline.log')
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
+    )
+
+    logging.info(f"Logging configured. Log file at: {log_file}")

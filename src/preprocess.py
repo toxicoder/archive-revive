@@ -1,7 +1,18 @@
-# src/preprocess.py
-# Contains functions for image preprocessing using OpenCV.
-# Key tasks: deskewing, noise reduction, adaptive binarization, and layout analysis.
+import cv2
+import logging
 
-# TODO: Implement deskew() using Hough Transform on detected text blocks.
-# TODO: Implement denoise() using a non-local means filter.
-# TODO: Implement binarize() using adaptive thresholding.
+def preprocess_image(image_path, output_path):
+    """
+    Applies a series of preprocessing steps to the image.
+    """
+    logging.info(f"Preprocessing image: {image_path}")
+
+    # Read the image
+    image = cv2.imread(image_path)
+
+    # TODO: Add actual preprocessing steps here
+
+    # For now, just save a copy of the original image
+    cv2.imwrite(output_path, image)
+    logging.info(f"Preprocessed image saved to: {output_path}")
+    return output_path
