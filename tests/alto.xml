@@ -1,0 +1,40 @@
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v4#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v4# http://www.loc.gov/standards/alto/v4/alto-4-2.xsd">
+  <Description>
+    <MeasurementUnit>pixel</MeasurementUnit>
+    <sourceImageInformation>
+      <fileName>test.jpg</fileName>
+    </sourceImageInformation>
+  </Description>
+  <Layout>
+    <Page ID="PAGE1" PHYSICAL_IMG_NR="1" HEIGHT="1000" WIDTH="800">
+      <PrintSpace HPOS="0" VPOS="0" WIDTH="800" HEIGHT="1000">
+        <TextBlock ID="BLOCK1" HPOS="50" VPOS="50" WIDTH="700" HEIGHT="100">
+          <TextLine ID="LINE1" HPOS="50" VPOS="50" WIDTH="700" HEIGHT="50">
+            <String ID="S1" CONTENT="This" HPOS="50" VPOS="50" WIDTH="100" HEIGHT="50"/>
+            <String ID="S2" CONTENT="is" HPOS="155" VPOS="50" WIDTH="50" HEIGHT="50"/>
+            <String ID="S3" CONTENT="a" HPOS="210" VPOS="50" WIDTH="30" HEIGHT="50"/>
+            <String ID="S4" CONTENT="test" HPOS="245" VPOS="50" WIDTH="100" HEIGHT="50"/>
+            <String ID="S5" CONTENT="of" HPOS="350" VPOS="50" WIDTH="50" HEIGHT="50"/>
+            <String ID="S6" CONTENT="the" HPOS="405" VPOS="50" WIDTH="70" HEIGHT="50"/>
+            <String ID="S7" CONTENT="RAG" HPOS="480" VPOS="50" WIDTH="80" HEIGHT="50"/>
+            <String ID="S8" CONTENT="normali-" HPOS="565" VPOS="50" WIDTH="150" HEIGHT="50"/>
+          </TextLine>
+          <TextLine ID="LINE2" HPOS="50" VPOS="100" WIDTH="700" HEIGHT="50">
+            <String ID="S9" CONTENT="zation" HPOS="50" VPOS="100" WIDTH="120" HEIGHT="50"/>
+            <String ID="S10" CONTENT="script." HPOS="175" VPOS="100" WIDTH="120" HEIGHT="50"/>
+          </TextLine>
+        </TextBlock>
+        <TextBlock ID="BLOCK2" HPOS="50" VPOS="200" WIDTH="700" HEIGHT="50">
+          <TextLine ID="LINE3" HPOS="50" VPOS="200" WIDTH="700" HEIGHT="50">
+            <String ID="S11" CONTENT="This" HPOS="50" VPOS="200" WIDTH="100" HEIGHT="50"/>
+            <String ID="S12" CONTENT="is" HPOS="155" VPOS="200" WIDTH="50" HEIGHT="50"/>
+            <String ID="S13" CONTENT="another" HPOS="210" VPOS="200" WIDTH="150" HEIGHT="50"/>
+            <String ID="S14" CONTENT="block" HPOS="365" VPOS="200" WIDTH="100" HEIGHT="50"/>
+            <String ID="S15" CONTENT="of" HPOS="470" VPOS="200" WIDTH="50" HEIGHT="50"/>
+            <String ID="S16" CONTENT="text." HPOS="525" VPOS="200" WIDTH="100" HEIGHT="50"/>
+          </TextLine>
+        </TextBlock>
+      </PrintSpace>
+    </Page>
+  </Layout>
+</alto>

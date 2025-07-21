@@ -41,18 +41,19 @@ class TestPipeline(unittest.TestCase):
         main(self.input_dir, self.output_dir, self.config_path)
 
         # Check for output directories
+        image_output_dir = os.path.join(self.output_dir, 'test_image')
         self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'logs')))
-        self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'preprocessed')))
-        self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'ocr')))
-        self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'rag')))
-        self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'html')))
+        self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'preprocessed')))
+        self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'ocr')))
+        self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'rag')))
+        self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'html')))
 
         # Check for output files
         self.assertTrue(os.path.exists(os.path.join(self.output_dir, 'logs', 'pipeline.log')))
-        self.assertTrue(os.path.exists(os.path.join(self.output_dir, 'preprocessed', 'test_image.png')))
-        self.assertTrue(os.path.exists(os.path.join(self.output_dir, 'ocr', 'test_image.xml')))
-        self.assertTrue(os.path.exists(os.path.join(self.output_dir, 'rag', 'test_image.json')))
-        self.assertTrue(os.path.exists(os.path.join(self.output_dir, 'html', 'test_image.html')))
+        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'preprocessed', 'test_image.png')))
+        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'ocr', 'test_image.xml')))
+        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'rag', 'test_image.json')))
+        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'html', 'test_image.html')))
 
 if __name__ == '__main__':
     unittest.main()

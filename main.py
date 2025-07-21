@@ -34,8 +34,13 @@ def process_image(image_path, output_dir, config):
         alto_path = run_ocr(preprocessed_path, ocr_dir, psm)
 
         # --- Normalize for RAG ---
-        from src.normalize_rag import normalize_for_rag
-        normalize_for_rag(alto_path, rag_dir)
+        from src.normalize_rag import generate_rag_json
+        rag_output_path = os.path.join(rag_dir, f"{base_name}.json")
+        rag_config = {
+            "publication_date": config.get('Metadata', 'PublicationDate', fallback=None),
+            "newspaper_title": config.get('Metadata', 'NewspaperTitle', fallback=None)
+        }
+        generate_rag_json(alto_path, rag_output_path, rag_config)
 
         # --- Generate HTML ---
         from src.generate_html import create_html_from_alto
