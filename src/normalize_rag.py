@@ -1,14 +1,17 @@
 import json
 import logging
-import os
 import re
 from lxml import etree
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
-def generate_rag_json(alto_path: str, output_json_path: str, config: dict) -> bool:
+
+def generate_rag_json(
+    alto_path: str, output_json_path: str, config: dict
+) -> bool:
     """
-    Processes an ALTO XML file to produce a clean, structured JSON file for RAG ingestion.
+    Processes an ALTO XML file to produce a clean, structured JSON file for
+    RAG ingestion.
     """
     logging.info(f"Normalizing ALTO XML for RAG: {alto_path}")
 
@@ -35,7 +38,9 @@ def generate_rag_json(alto_path: str, output_json_path: str, config: dict) -> bo
     stop_words = set(stopwords.words('english'))
 
     for text_block in root.findall('.//TextBlock'):
-        raw_text = ' '.join(string.get('CONTENT') for string in text_block.findall('.//String'))
+        raw_text = ' '.join(
+            string.get('CONTENT') for string in text_block.findall('.//String')
+        )
 
         # Hyphenation correction
         cleaned_text = re.sub(r'-\s+', '', raw_text)

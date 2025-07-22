@@ -3,6 +3,7 @@ from unittest.mock import patch
 import os
 from src.generate_html import create_html_from_alto
 
+
 class TestGenerateHtmlErrors(unittest.TestCase):
 
     def setUp(self):
@@ -33,8 +34,12 @@ class TestGenerateHtmlErrors(unittest.TestCase):
     @patch('lxml.etree.parse', side_effect=Exception("Test error"))
     def test_create_html_from_alto_error(self, mock_parse):
         """Test that create_html_from_alto returns False on error."""
-        result = create_html_from_alto(self.alto_path, self.output_html_path, self.image_dir_path, self.original_scan_path)
+        result = create_html_from_alto(
+            self.alto_path, self.output_html_path, self.image_dir_path,
+            self.original_scan_path
+        )
         self.assertFalse(result)
+
 
 if __name__ == '__main__':
     unittest.main()

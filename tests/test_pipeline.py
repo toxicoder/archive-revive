@@ -1,12 +1,10 @@
 import os
-import sys
 import shutil
 import unittest
-
-# Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+import cv2
+import numpy as np
 from main import main
+
 
 class TestPipeline(unittest.TestCase):
 
@@ -20,10 +18,9 @@ class TestPipeline(unittest.TestCase):
         os.makedirs(self.output_dir, exist_ok=True)
 
         # Create a dummy image file using OpenCV
-        import cv2
-        import numpy as np
         dummy_image = np.zeros((100, 100, 3), dtype=np.uint8)
-        cv2.imwrite(os.path.join(self.input_dir, 'test_image.png'), dummy_image)
+        cv2.imwrite(os.path.join(self.input_dir, 'test_image.png'),
+                    dummy_image)
 
         # Create a dummy config file
         with open(self.config_path, 'w') as f:
@@ -37,23 +34,34 @@ class TestPipeline(unittest.TestCase):
         os.remove(self.config_path)
 
     def test_pipeline_creates_output_files(self):
-        """Test that the pipeline runs and creates the expected output files."""
+        """Test that the pipeline runs and creates expected output files."""
         main(self.input_dir, self.output_dir, self.config_path)
 
         # Check for output directories
         image_output_dir = os.path.join(self.output_dir, 'test_image')
         self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'logs')))
-        self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'preprocessed')))
+        self.assertTrue(
+            os.path.isdir(os.path.join(image_output_dir, 'preprocessed'))
+        )
         self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'ocr')))
         self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'rag')))
         self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'html')))
 
         # Check for output files
-        self.assertTrue(os.path.exists(os.path.join(self.output_dir, 'logs', 'pipeline.log')))
-        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'preprocessed', 'test_image.png')))
-        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'ocr', 'test_image.xml')))
-        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'rag', 'test_image.json')))
-        self.assertTrue(os.path.exists(os.path.join(image_output_dir, 'html', 'test_image.html')))
+        log_file = os.path.join(self.output_dir, 'logs', 'pipeline.log')
+        preprocessed_file = os.path.join(
+            image_output_dir, 'preprocessed', 'test_image.png'
+        )
+        ocr_file = os.path.join(image_output_dir, 'ocr', 'test_image.xml')
+        rag_file = os.path.join(image_output_dir, 'rag', 'test_image.json')
+        html_file = os.path.join(image_output_dir, 'html', 'test_image.html')
+
+        self.assertTrue(os.path.exists(log_file))
+        self.assertTrue(os.path.exists(preprocessed_file))
+        self.assertTrue(os.path.exists(ocr_file))
+        self.assertTrue(os.path.exists(rag_file))
+        self.assertTrue(os.path.exists(html_file))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -5,6 +5,7 @@ import numpy as np
 from src.generate_html import create_html_from_alto
 from lxml import etree
 
+
 class TestGenerateHTML(unittest.TestCase):
 
     def setUp(self):
@@ -22,10 +23,12 @@ class TestGenerateHTML(unittest.TestCase):
             <PrintSpace>
                 <TextBlock>
                     <TextLine>
-                        <String CONTENT="Hello" HPOS="10" VPOS="20" WIDTH="50" HEIGHT="10"/>
+                        <String CONTENT="Hello" HPOS="10" VPOS="20"
+                                WIDTH="50" HEIGHT="10"/>
                     </TextLine>
                 </TextBlock>
-                <Illustration HPOS="100" VPOS="100" WIDTH="200" HEIGHT="150"/>
+                <Illustration HPOS="100" VPOS="100" WIDTH="200"
+                              HEIGHT="150"/>
             </PrintSpace>
         </Page>
     </Layout>
@@ -55,12 +58,17 @@ class TestGenerateHTML(unittest.TestCase):
 
     def test_create_html_from_alto(self):
         """Test that the HTML file and image are created successfully."""
-        success = create_html_from_alto(self.alto_path, self.output_html_path, self.image_dir_path, self.original_scan_path)
+        success = create_html_from_alto(
+            self.alto_path, self.output_html_path, self.image_dir_path,
+            self.original_scan_path
+        )
         self.assertTrue(success)
         self.assertTrue(os.path.exists(self.output_html_path))
 
         # Check for illustration image
-        expected_image_path = os.path.join(self.image_dir_path, "illustration_0.png")
+        expected_image_path = os.path.join(
+            self.image_dir_path, "illustration_0.png"
+        )
         self.assertTrue(os.path.exists(expected_image_path))
 
         # Check HTML content
@@ -73,6 +81,7 @@ class TestGenerateHTML(unittest.TestCase):
         imgs = tree.findall(".//img")
         self.assertEqual(len(imgs), 1)
         self.assertTrue("illustration_0.png" in imgs[0].get("src"))
+
 
 if __name__ == '__main__':
     unittest.main()
