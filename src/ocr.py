@@ -1,3 +1,6 @@
+"""
+This module contains the OCR functionality for the project.
+"""
 import logging
 import os
 import pytesseract

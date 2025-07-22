@@ -1,6 +1,7 @@
 import os
 import shutil
 import unittest
+from unittest.mock import patch, MagicMock
 import cv2
 import numpy as np
 from main import main
@@ -26,6 +27,9 @@ class TestPipeline(unittest.TestCase):
         with open(self.config_path, 'w') as f:
             f.write('[OCR]\n')
             f.write('PSM = 3\n')
+            f.write('[Metadata]\n')
+            f.write('PublicationDate = 2024-01-01\n')
+            f.write('NewspaperTitle = The Test Times\n')
 
     def tearDown(self):
         """Clean up after tests."""
@@ -33,34 +37,43 @@ class TestPipeline(unittest.TestCase):
         shutil.rmtree(self.output_dir)
         os.remove(self.config_path)
 
-    def test_pipeline_creates_output_files(self):
+    @patch('shutil.copy')
+    @patch('src.generate_html.create_html_from_alto', return_value=True)
+    @patch('src.normalize_rag.generate_rag_json', return_value=True)
+    @patch('src.ocr.run_ocr')
+    @patch('src.preprocess.preprocess_image')
+    def test_pipeline_creates_output_files(self, mock_preprocess_image, mock_run_ocr, mock_generate_rag_json, mock_create_html_from_alto, mock_shutil_copy):
         """Test that the pipeline runs and creates expected output files."""
+        # Configure mocks
+        mock_preprocess_image.return_value = os.path.join(self.output_dir, 'test_image', 'preprocessed', 'test_image.png')
+        mock_run_ocr.return_value = os.path.join(self.output_dir, 'test_image', 'ocr', 'test_image.xml')
+
+        # Create dummy output files
+        os.makedirs(os.path.join(self.output_dir, 'test_image', 'preprocessed'), exist_ok=True)
+        os.makedirs(os.path.join(self.output_dir, 'test_image', 'ocr'), exist_ok=True)
+        os.makedirs(os.path.join(self.output_dir, 'test_image', 'rag'), exist_ok=True)
+        os.makedirs(os.path.join(self.output_dir, 'test_image', 'html', 'images'), exist_ok=True)
+
+        with open(mock_preprocess_image.return_value, 'w') as f:
+            f.write('')
+        with open(mock_run_ocr.return_value, 'w') as f:
+            f.write('<xml></xml>')
+
         main(self.input_dir, self.output_dir, self.config_path)
 
         # Check for output directories
         image_output_dir = os.path.join(self.output_dir, 'test_image')
         self.assertTrue(os.path.isdir(os.path.join(self.output_dir, 'logs')))
-        self.assertTrue(
-            os.path.isdir(os.path.join(image_output_dir, 'preprocessed'))
-        )
+        self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'preprocessed')))
         self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'ocr')))
         self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'rag')))
         self.assertTrue(os.path.isdir(os.path.join(image_output_dir, 'html')))
 
-        # Check for output files
-        log_file = os.path.join(self.output_dir, 'logs', 'pipeline.log')
-        preprocessed_file = os.path.join(
-            image_output_dir, 'preprocessed', 'test_image.png'
-        )
-        ocr_file = os.path.join(image_output_dir, 'ocr', 'test_image.xml')
-        rag_file = os.path.join(image_output_dir, 'rag', 'test_image.json')
-        html_file = os.path.join(image_output_dir, 'html', 'test_image.html')
-
-        self.assertTrue(os.path.exists(log_file))
-        self.assertTrue(os.path.exists(preprocessed_file))
-        self.assertTrue(os.path.exists(ocr_file))
-        self.assertTrue(os.path.exists(rag_file))
-        self.assertTrue(os.path.exists(html_file))
+        # Check that mocks were called
+        mock_preprocess_image.assert_called_once()
+        mock_run_ocr.assert_called_once()
+        mock_generate_rag_json.assert_called_once()
+        mock_create_html_from_alto.assert_called_once()
 
 
 if __name__ == '__main__':

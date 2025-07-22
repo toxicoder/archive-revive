@@ -1,8 +1,9 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import os
 from src.ocr import run_ocr
 import pytesseract
+from PIL import Image
 
 
 class TestRunOCR(unittest.TestCase):
@@ -12,7 +13,6 @@ class TestRunOCR(unittest.TestCase):
         self.output_dir = "test_output"
         os.makedirs(self.output_dir, exist_ok=True)
         # Create a dummy image
-        from PIL import Image
         img = Image.new('RGB', (100, 100), color='black')
         img.save(self.image_path)
 
@@ -23,6 +23,14 @@ class TestRunOCR(unittest.TestCase):
             import shutil
             shutil.rmtree(self.output_dir)
 
+    @patch('pytesseract.image_to_alto_xml', return_value=b"<xml></xml>")
+    def test_run_ocr_success(self, mock_image_to_alto_xml):
+        """Test the successful execution of run_ocr."""
+        alto_path = run_ocr(self.image_path, self.output_dir, 3)
+        self.assertTrue(os.path.exists(alto_path))
+        with open(alto_path, 'rb') as f:
+            self.assertEqual(f.read(), b"<xml></xml>")
+
     @patch('pytesseract.image_to_alto_xml',
            side_effect=pytesseract.TesseractNotFoundError)
     def test_run_ocr_tesseract_not_found(self, mock_image_to_alto_xml):
@@ -31,6 +39,13 @@ class TestRunOCR(unittest.TestCase):
         is not found.
         """
         with self.assertRaises(pytesseract.TesseractNotFoundError):
+            run_ocr(self.image_path, self.output_dir, 3)
+
+    @patch('pytesseract.image_to_alto_xml',
+           side_effect=ValueError("Test error"))
+    def test_run_ocr_value_error(self, mock_image_to_alto_xml):
+        """Test that run_ocr raises a ValueError."""
+        with self.assertRaises(ValueError):
             run_ocr(self.image_path, self.output_dir, 3)
 
     @patch('pytesseract.image_to_alto_xml',
