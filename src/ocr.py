@@ -17,7 +17,7 @@ def run_ocr(image_path, output_dir, psm):
     # Run Tesseract
     try:
         xml_output = pytesseract.image_to_alto_xml(
-            Image.open(image_path), config=f'--psm {psm}'
+            Image.open(image_path), config=f'--psm {int(psm)}'
         )
         with open(alto_path, 'wb') as f:
             f.write(xml_output)
@@ -25,7 +25,7 @@ def run_ocr(image_path, output_dir, psm):
     except pytesseract.TesseractNotFoundError:
         logging.error("Tesseract is not installed or not in your PATH.")
         raise
-    except Exception as e:
+    except (Exception, ValueError) as e:
         logging.error(f"Error during OCR processing: {e}")
         raise
 
