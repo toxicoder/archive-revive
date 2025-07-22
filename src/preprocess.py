@@ -1,5 +1,8 @@
-import cv2
+"""
+This module contains the image preprocessing functionality.
+"""
 import logging
+import cv2
 
 
 def preprocess_image(image_path, output_path):
