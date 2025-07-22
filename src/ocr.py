@@ -11,7 +11,7 @@ def run_ocr(image_path, output_dir, psm):
     """
     Runs Tesseract OCR on the given image and saves the ALTO XML output.
     """
-    logging.info(f"Running OCR on {image_path} with PSM {psm}")
+    logging.info("Running OCR on %s with PSM %s", image_path, psm)
 
     # Construct the output path
     base_name = os.path.splitext(os.path.basename(image_path))[0]
@@ -24,12 +24,12 @@ def run_ocr(image_path, output_dir, psm):
         )
         with open(alto_path, 'wb') as f:
             f.write(xml_output)
-        logging.info(f"ALTO XML saved to: {alto_path}")
+        logging.info("ALTO XML saved to: %s", alto_path)
     except pytesseract.TesseractNotFoundError:
         logging.error("Tesseract is not installed or not in your PATH.")
         raise
     except (Exception, ValueError) as e:
-        logging.error(f"Error during OCR processing: {e}")
+        logging.error("Error during OCR processing: %s", e)
         raise
 
     return alto_path

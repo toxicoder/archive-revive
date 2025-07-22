@@ -1,3 +1,6 @@
+"""
+This module contains the logging configuration for the project.
+"""
 import logging
 import os
 
@@ -25,4 +28,4 @@ def setup_logging(log_dir):
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
-    logging.info(f"Logging configured. Log file at: {log_file}")
+    logging.info("Logging configured. Log file at: %s", log_file)

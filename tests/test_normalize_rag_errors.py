@@ -34,7 +34,7 @@ class TestNormalizeRagErrors(unittest.TestCase):
         )
         self.assertFalse(result)
 
-    @patch('builtins.open', side_effect=Exception("Test error"))
+    @patch('builtins.open', side_effect=IOError("Test error"))
     def test_generate_rag_json_read_error(self, mock_open):
         """Test that generate_rag_json returns False on file read error."""
         result = generate_rag_json(

@@ -1,3 +1,6 @@
+"""
+This module is for normalizing the RAG (Retrieval-Augmented Generation) JSON output.
+"""
 import json
 import logging
 import re
@@ -13,16 +16,16 @@ def generate_rag_json(
     Processes an ALTO XML file to produce a clean, structured JSON file for
     RAG ingestion.
     """
-    logging.info(f"Normalizing ALTO XML for RAG: {alto_path}")
+    logging.info("Normalizing ALTO XML for RAG: %s", alto_path)
 
     try:
         with open(alto_path, 'r', encoding='utf-8') as f:
             xml_content = f.read()
     except FileNotFoundError:
-        logging.error(f"ALTO XML file not found at: {alto_path}")
+        logging.error("ALTO XML file not found at: %s", alto_path)
         return False
-    except Exception as e:
-        logging.error(f"Error reading ALTO XML file: {e}")
+    except IOError as e:
+        logging.error("Error reading ALTO XML file: %s", e)
         return False
 
     # Remove the default namespace declaration for easier parsing
@@ -31,7 +34,7 @@ def generate_rag_json(
     try:
         root = etree.fromstring(xml_content.encode('utf-8'))
     except etree.XMLSyntaxError as e:
-        logging.error(f"Error parsing ALTO XML: {e}")
+        logging.error("Error parsing ALTO XML: %s", e)
         return False
 
     articles = []
@@ -72,8 +75,8 @@ def generate_rag_json(
         with open(output_json_path, 'w', encoding='utf-8') as f:
             json.dump(articles, f, indent=4)
     except IOError as e:
-        logging.error(f"Error writing JSON to file: {e}")
+        logging.error("Error writing JSON to file: %s", e)
         return False
 
-    logging.info(f"RAG-ready JSON saved to: {output_json_path}")
+    logging.info("RAG-ready JSON saved to: %s", output_json_path)
     return True

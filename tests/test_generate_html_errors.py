@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 import os
 from src.generate_html import create_html_from_alto
+from lxml import etree
 
 
 class TestGenerateHtmlErrors(unittest.TestCase):
@@ -31,9 +32,21 @@ class TestGenerateHtmlErrors(unittest.TestCase):
             import shutil
             shutil.rmtree(self.image_dir_path)
 
-    @patch('lxml.etree.parse', side_effect=Exception("Test error"))
+    @patch('lxml.etree.parse', side_effect=etree.ParseError("Test error", None, 1, 1))
     def test_create_html_from_alto_error(self, mock_parse):
         """Test that create_html_from_alto returns False on error."""
+        result = create_html_from_alto(
+            self.alto_path, self.output_html_path, self.image_dir_path,
+            self.original_scan_path
+        )
+        self.assertFalse(result)
+
+    @patch('cv2.imread', return_value=None)
+    def test_create_html_from_alto_no_image(self, mock_imread):
+        """
+        Test that create_html_from_alto returns False when the image
+        cannot be read.
+        """
         result = create_html_from_alto(
             self.alto_path, self.output_html_path, self.image_dir_path,
             self.original_scan_path
