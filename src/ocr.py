@@ -3,6 +3,7 @@ import os
 import pytesseract
 from PIL import Image
 
+
 def run_ocr(image_path, output_dir, psm):
     """
     Runs Tesseract OCR on the given image and saves the ALTO XML output.
@@ -15,7 +16,9 @@ def run_ocr(image_path, output_dir, psm):
 
     # Run Tesseract
     try:
-        xml_output = pytesseract.image_to_alto_xml(Image.open(image_path), config=f'--psm {psm}')
+        xml_output = pytesseract.image_to_alto_xml(
+            Image.open(image_path), config=f'--psm {psm}'
+        )
         with open(alto_path, 'wb') as f:
             f.write(xml_output)
         logging.info(f"ALTO XML saved to: {alto_path}")

@@ -2,17 +2,25 @@ import logging
 import os
 import cv2
 from lxml import etree
-from PIL import Image
 
-def create_html_from_alto(alto_path: str, output_html_path: str, image_dir_path: str, original_scan_path: str) -> bool:
+
+def create_html_from_alto(
+    alto_path: str,
+    output_html_path: str,
+    image_dir_path: str,
+    original_scan_path: str
+) -> bool:
     """
-    Parses an ALTO XML file and generates an HTML file that visually reconstructs the original page layout.
+    Parses an ALTO XML file and generates an HTML file that visually
+    reconstructs the original page layout.
 
     Args:
         alto_path: Path to the alto.xml file.
         output_html_path: Path where the final .html file should be saved.
-        image_dir_path: Path to the directory where extracted images should be saved.
-        original_scan_path: Path to the original scanned image for image extraction.
+        image_dir_path: Path to the directory where extracted images
+                        should be saved.
+        original_scan_path: Path to the original scanned image for image
+                            extraction.
 
     Returns:
         True if the HTML was generated successfully, False otherwise.
@@ -29,7 +37,9 @@ def create_html_from_alto(alto_path: str, output_html_path: str, image_dir_path:
         # Create the basic HTML document structure
         html = etree.Element("html")
         head = etree.SubElement(html, "head")
-        etree.SubElement(head, "title").text = os.path.basename(output_html_path)
+        etree.SubElement(head, "title").text = os.path.basename(
+            output_html_path
+        )
         etree.SubElement(head, "link", rel="stylesheet", href="style.css")
         body = etree.SubElement(html, "body")
 
@@ -43,11 +53,17 @@ def create_html_from_alto(alto_path: str, output_html_path: str, image_dir_path:
 
             span = etree.SubElement(body, "span")
             span.text = content
-            span.set("style", f"position: absolute; left: {hpos}px; top: {vpos}px; width: {width}px; height: {height}px;")
+            style = (
+                f"position: absolute; left: {hpos}px; top: {vpos}px; "
+                f"width: {width}px; height: {height}px;"
+            )
+            span.set("style", style)
 
         # Process Illustration elements
         original_image = cv2.imread(original_scan_path)
-        for i, illust_element in enumerate(tree.findall(f".//{{{xmlns}}}Illustration")):
+        for i, illust_element in enumerate(
+            tree.findall(f".//{{{xmlns}}}Illustration")
+        ):
             hpos = int(float(illust_element.get("HPOS")))
             vpos = int(float(illust_element.get("VPOS")))
             width = int(float(illust_element.get("WIDTH")))
@@ -63,17 +79,30 @@ def create_html_from_alto(alto_path: str, output_html_path: str, image_dir_path:
 
             # Create an img tag
             img = etree.SubElement(body, "img")
-            img.set("src", os.path.join(os.path.basename(image_dir_path), image_filename))
-            img.set("style", f"position: absolute; left: {hpos}px; top: {vpos}px; width: {width}px; height: {height}px;")
+            img.set(
+                "src",
+                os.path.join(os.path.basename(image_dir_path), image_filename)
+            )
+            img.set(
+                "style",
+                f"position: absolute; left: {hpos}px; top: {vpos}px; "
+                f"width: {width}px; height: {height}px;"
+            )
 
         # Add the fixed-position button
-        button = etree.SubElement(body, "a", href=original_scan_path, target="_blank")
+        button = etree.SubElement(
+            body, "a", href=original_scan_path, target="_blank"
+        )
         button.text = "View Original Scan"
         button.set("class", "view-original-button")
 
         # Write the complete HTML structure to the output file
         with open(output_html_path, "wb") as f:
-            f.write(etree.tostring(html, pretty_print=True, method="html", encoding="utf-8"))
+            f.write(
+                etree.tostring(
+                    html, pretty_print=True, method="html", encoding="utf-8"
+                )
+            )
 
         logging.info(f"HTML file saved to: {output_html_path}")
         return True

@@ -1,6 +1,7 @@
 import cv2
 import logging
 
+
 def preprocess_image(image_path, output_path):
     """
     Applies a series of preprocessing steps to the image.
