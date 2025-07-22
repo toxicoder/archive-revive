@@ -28,7 +28,9 @@ class TestPipelineWithPDF(unittest.TestCase):
     @patch('src.ocr.run_ocr')
     @patch('src.preprocess.preprocess_image')
     @patch('fitz.open')
-    def test_pdf_processing(self, mock_fitz_open, mock_preprocess_image, mock_run_ocr, mock_generate_rag_json, mock_create_html_from_alto):
+    def test_pdf_processing(self, mock_fitz_open, mock_preprocess_image,
+                            mock_run_ocr, mock_generate_rag_json,
+                            mock_create_html_from_alto):
         # Mock the PDF processing
         mock_doc = unittest.mock.MagicMock()
         mock_page = unittest.mock.MagicMock()
@@ -54,7 +56,9 @@ class TestPipelineWithPDF(unittest.TestCase):
                 f.write("dummy json")
             return True
 
-        def create_html_from_alto_mock(alto_path, output_html_path, image_dir_path, original_scan_path):
+        def create_html_from_alto_mock(
+                alto_path, output_html_path, image_dir_path, original_scan_path
+        ):
             with open(output_html_path, "w") as f:
                 f.write("dummy html")
             return True
